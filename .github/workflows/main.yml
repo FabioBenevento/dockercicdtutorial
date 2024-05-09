@@ -11,22 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      -name: Log in to container registry
-       uses: docker/login-action@v1
-       with:
-         registry: https://index.docker.io/v1/
-         username: ${{ secrets.ContainerUsername }}
-         password: ${{ secrets.ContainerPassword }}
+      - name: Log in to container registry
+        uses: docker/login-action@v1
+        with:
+          registry: https://index.docker.io/v1/
+          username: ${{ secrets.ContainerUsername }}
+          password: ${{ secrets.ContainerPassword }}
 
-      -name: Build and push container image to registry
-       uses: docker/build-push-action@v2
-       with:
-         context: . 
-         push: true
-         tags: index.docker.io/${{ secrets.ContainerUsername }}/dockercicd:${{ github.sha }}
-         file: Dockerfile
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v2
+        with:
+          context: . 
+          push: true
+          tags: index.docker.io/${{ secrets.ContainerUsername }}/dockercicd:${{ github.sha }}
+          file: Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
@@ -36,13 +36,13 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs..webapp-url }}
 
     steps:
-      -name: Deploy to Azure Web App
-       id: deploy-to-webapp
-       uses: azure/webapps-deploy@v2
-       with:
-         app-name: 'dockercicdtutorial'
-         slot-name: 'production'
-         publish-profile: ${{ secrets.PublishProfile }}
-         images: index.docker.io/${{ secrets.ContainerUsername }}/dockercicd:${{ github.sha }}
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'dockercicdtutorial'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.PublishProfile }}
+          images: index.docker.io/${{ secrets.ContainerUsername }}/dockercicd:${{ github.sha }}
          
          
