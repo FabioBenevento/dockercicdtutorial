@@ -23,13 +23,13 @@ jobs:
       -name: Build and push container image to registry
        uses: docker/build-push-action@v2
        with:
-         context: 
+         context: . 
          push: true
          tags: index.docker.io/${{ secrets.ContainerUsername }}/dockercicd:${{ github.sha }}
          file: Dockerfile
 
   deploy:
-    runs-on: ubun tu-latest
+    runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'production'
